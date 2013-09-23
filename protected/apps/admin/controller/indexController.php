@@ -8,13 +8,16 @@ class indexController extends commonController
 			$lists[$i]['link'] = url('index/detail') . '&id=' . $lists[$i]['id'];
 		}
 		$data = array(
-			'0' =>	array('lists' => $lists)
+			'0' => '',
+			'1' =>	array('lists' => $lists)
 		);
 		$temp_url = array(
-			'0' => 'html/home'
+			'0' => 'html/nav',
+			'1' => 'html/home'
 		);
 		$mod = array(
-			'0' => '#mod_index'
+			'0' => '#mod-main-nav',
+			'1' => '#mod-content'
 		);
 
 		$result = array(
@@ -28,14 +31,20 @@ class indexController extends commonController
 	
 	public function detail() {
 		$id = $_GET['id'];
-		$data = model('home')->getDetail($id);	//根据id查询文章
-		$data[0]['date'] = date('Y/m/d', strtotime($data[0]['created']));
-
+		$detail = model('home')->getDetail($id);	//根据id查询文章
+		$detail[0]['date'] = date('Y/m/d', strtotime($detail[0]['created']));
+		$data = array(
+			'0' => '',
+			'1' => $detail[0]
+		);
+		
 		$temp_url = array(
-			'0' => 'html/detail'
+			'0' => 'html/nav',
+			'1' => 'html/detail'
 		);
 		$mod = array(
-			'0' => '#mod_index'
+			'0' => '#mod-main-nav',
+			'1' => '#mod-content'
 		);
 		$result = array(
 			'temp_url' => $temp_url,
@@ -48,14 +57,17 @@ class indexController extends commonController
 	public function add() {
 		
 		$data = array(
-			'0' => ''
+			'0' => '',
+			'1' => ''
 		);
 		
 		$temp_url = array(
-			'0' => 'html/add'
+			'0' => 'html/nav',
+			'1' => 'html/add'
 		);
 		$mod = array(
-			'0' => '#mod_index'
+			'0' => '#mod-main-nav',
+			'1' => '#mod-content'
 		);
 		$result = array(
 			'temp_url' => $temp_url,

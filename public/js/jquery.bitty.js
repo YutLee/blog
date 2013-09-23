@@ -621,7 +621,6 @@
 			actualState = History.getState(false),
 			url = actualState.url;
 			
-		url = url.replace(bt.dominRegExp, '');	//删除网址域名，减少缓存变量名的长度
 		//url = url.replace(/[\u4e00-\u9fa5]/g, encodeURIComponent('$0', true));	//对中文进行编码
 		
 		if(!bt.isLinkClick) {
