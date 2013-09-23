@@ -1,0 +1,60 @@
+<nav class="main-nav">
+	<header><h1>tony</h1></header>
+	<section>
+        <dl>
+            <dd class="current">
+            	<a href="">文章列表</a>
+            </dd>
+            <dd><a href="index.php?r=admin/index/add">添加文章</a></dd>
+        </dl>
+    </section>
+    <footer>
+    	<span>退出</span>
+        <span>设置</span>
+    </footer>
+</nav>
+<div class="content">
+	<header class="main-menu">
+    	<h2>
+        	文章列表
+        	<em></em>
+        </h2>
+        <div class="top-menu">
+            <ul>
+            	<li><a href="">返回</a></li>
+            	<li><a href="">刷新</a></li>
+                <li><a href="">添加</a></li>
+                <li><a href="">删除</a></li>
+            </ul>
+            <div class="search">
+            	<input type="text" placeholder="Search..." />
+            </div>
+        </div>
+    </header>
+    <div class="main">
+    	<div class="lists">
+        	<table>
+            	<thead>
+                	<tr>
+                    	<th class="cb"><input type="checkbox" /></th>
+                        <th class="title">标题</th>
+                        <th>预览</th>
+                        <th class="num">喜爱</th>
+                        <th class="date">日期</th>
+                    </tr>
+                </thead>
+            	<tbody>
+                	{{~it.lists :value}}
+                	<tr class="" data-link="{{=value.link}}">
+                    	<td><input type="checkbox" name="{{=value.id}}" /></td>
+                        <td><div class="yw">{{=value.title}}</div></td>
+                        <td>{{=value.preview}}</td>
+                        <td class="tc">{{=value.likes}}</td>
+                        <td class="tc" title="{{=value.created}}">{{=value.date}}</td>
+                    </tr>
+                    {{~}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

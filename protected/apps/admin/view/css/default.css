@@ -1,0 +1,60 @@
+/* 全局滚动条 */
+::-webkit-scrollbar {height: 16px;overflow: visible;width: 16px;}
+body::-webkit-scrollbar-thumb {border-width: 1px 1px 1px 5px;}
+::-webkit-scrollbar-thumb {background-color: #efeded;background-clip: padding-box;border: solid transparent;border-width: 1px 1px 1px 6px;min-height: 28px;padding: 100px 0 0;box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset 0 -1px 0 rgba(0,0,0,.07);}
+::-webkit-scrollbar-button {height: 0;width: 0;}
+::-webkit-scrollbar-track {background-clip: padding-box;border: solid transparent;border-width: 0 0 0 4px;background-color:#dddbda;}
+body::-webkit-scrollbar-track-piece {background-clip: padding-box;background-color: #f5f5f5;border: solid #fff;border-width: 0 0 0 3px;box-shadow: inset 1px 0 0 rgba(0,0,0,.14),inset -1px 0 0 rgba(0,0,0,.07);}
+body::-webkit-scrollbar-corner {background-clip: padding-box;background-color: #f5f5f5;border: solid #fff;border-width: 3px 0 0 3px;box-shadow: inset 1px 1px 0 rgba(0,0,0,.14);}
+::-webkit-scrollbar-corner {background: transparent;}
+
+
+html{background:#e0e0e0;/*#f5e9e4;*/}
+p{line-height:1.5;}
+
+.main-nav{position:absolute;top:0;bottom:0;left:0;background-color:#34313a;width:210px;}
+.main-nav header{height:95px;border-bottom:1px solid rgba(255,255,255,.1);color:#fff;}
+.main-nav footer{position:absolute;bottom:0;left:0;right:0;height:59px;background-color:#2f2c34;}
+.main-nav section{position:absolute;top:96px;bottom:59px;left:0;right:0;overflow-y:auto;}
+.main-nav section dl{min-height:220px;}
+.main-nav section dd{height:54px;border-bottom:1px solid rgba(255,255,255,.1);line-height:54px;}
+.main-nav section dd a{color:rgba(255,255,255,.5);display:block;padding:0 15px;}
+.main-nav section dd.current{background:#2c2a31;border-color:transparent;}
+.main-nav section dd.current a{color:#fff;}
+
+.content{position:absolute;top:0;right:0;bottom:0;left:210px;}
+.content header.main-menu{height:96px;display:-webkit-box;}
+.content header.main-menu h2{line-height:96px;text-indent:.5em;color:rgba(51,51,51,.5);font-size:30px;padding:0 20px;position:relative;top:0;left:0;}
+.content header.main-menu h2 em{position:absolute;right:0;top:1px;bottom:20px;width:1px;font-size:0;background:rgba(51,51,51,.1);}
+.content header.main-menu .top-menu{-webkit-box-flex:1;padding:0 20px;}
+.content header.main-menu .top-menu ul{float:left;}
+.content header.main-menu .top-menu ul li{float:left;}
+.content header.main-menu .top-menu .search{float:right;}
+
+.content .main{position:absolute;top:96px;left:0;right:0;bottom:0;overflow-y:auto;color:#5d5d5d;padding:0 10px;}
+.content .main td, .content .main th{padding:0 6px 0 10px; white-space:nowrap;overflow:hidden;height:38px;}
+.content .main th.cb{width:20px;}
+.content .main th.date{width:120px;}
+.content .main th.title{width:300px;}
+.content .main th.num{width:80px;}
+.content .main td.tc{text-align:center;}
+.content .main td .yw{overflow:hidden;white-space:nowrap;}
+.content .main thead tr{background:rgba(51,51,51,.1);}
+.content .main tbody tr{cursor: pointer;border:1px solid transparent;border-bottom:none;}
+.content .main tbody tr:nth-child(2n - 1){background:rgba(255,255,255,.3);}
+.content .main tbody tr:hover, .content .main tbody tr.chose{background:rgba(255,66,0,.1);}
+.content .main tbody tr.chose{border:1px solid rgba(255,66,0,1);}
+
+.blog-detail{width:810px;margin:0 auto;}
+.blog-detail>header{position:relative;}
+.blog-list>section>h2, .blog-detail>header>h2{font-size: 32px;font-weight:normal;margin: 0 0 10px;line-height: 42px;padding-left: 160px;}
+.blog-detail>header>h2{margin:0 0 20px;}
+.blog-list>section>h2 a, .blog-detail>header>h2 a{color: #333;}
+.blog-list>section>.meta, .blog-detail>header>.meta{position:absolute;top:0;left:0;}
+.blog-list>section>.meta time, .blog-detail>header>.meta time{font-weight: 300;font-size: 26px;opacity: .5;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter: alpha(opacity=50);}
+.blog-list>section>.meta p.likes, .blog-detail>header>.meta p.likes{float: right;margin-top: 12px;}
+.blog-detail>header>.meta p.likes{margin-top: 22px;}
+.blog-list>section>.meta p.likes span, .blog-detail>header>.meta p.likes a{padding-right: 22px;background-image: url('../img/likes.png');-webkit-background-size: 15px 15px;-moz-background-size: 15px 15px;background-size: 15px 15px;background-position: center right;background-repeat: no-repeat;}
+.blog-list>section>.meta p.likes span{color: #999;}
+.blog-list>section>.preview, .blog-detail>.body{padding-left:160px;}
+.blog-list>section>.preview a{display: block;margin-top: 10px;font-size: 13px;}

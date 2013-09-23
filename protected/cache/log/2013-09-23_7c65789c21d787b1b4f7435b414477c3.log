@@ -1,0 +1,32 @@
+2013-09-23 10:46:03 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: INSERT INTO blog  (`0`,`1`) VALUES ('','adsfasdf') <br>
+					<b>错误详情</b>: Unknown column '0' in 'field list'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-23 10:47:54 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: INSERT INTO blog  (`0`,`1`) VALUES ('','asdfa') <br>
+					<b>错误详情</b>: Unknown column '0' in 'field list'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-23 11:11:12 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: INSERT INTO blog  (`0`,`preview`,`body`) VALUES ('','法师打发','法师打发') <br>
+					<b>错误详情</b>: Unknown column '0' in 'field list'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-23 11:26:26 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-23 11:27:31 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-23 11:27:36 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-23 11:29:50 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-23 11:30:25 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>

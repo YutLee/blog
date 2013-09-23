@@ -1,0 +1,13 @@
+<!-- 未搜索 -->
+<div id="ajax_search" class="iscroll" style="top:46px;">
+    <div>
+        <div class="mod_my_search" id="hot_keywords">
+            <div class="title">热门搜索：</div>
+            <div class="ku_fix"> 
+            	{{~it.key :value}}
+              		<a href="index.php?r=default/hadsearch/index&keyword={{=value}}" data-temps="{{=it.link}}" data-title="搜索结果">{{=value}}</a>
+                {{~}}
+            </div>
+        </div>
+    </div>
+</div>

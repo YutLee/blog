@@ -1,0 +1,21 @@
+2013-09-17 15:12:38 | ::1 | /git/blog/index.php |default/detailController.php 控制器类不存在
+2013-09-17 15:52:45 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM ecm_blog  WHERE 1 ORDER BY create desc LIMIT 10<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'create desc LIMIT 10' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-17 15:57:17 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE 1 ORDER BY create desc LIMIT 10<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'create desc LIMIT 10' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-17 17:05:48 | ::1 | /git/blog/index.php |default/htmlController.php 控制器类不存在
+2013-09-17 17:13:35 | ::1 | /git/blog/index.php |default/htmlController.php 控制器类不存在
+2013-09-17 17:13:36 | ::1 | /git/blog/index.php |default/htmlController.php 控制器类不存在
+2013-09-17 17:14:19 | ::1 | /git/blog/index.php |default/indexController.php的datail() 方法不存在
+2013-09-17 17:14:41 | ::1 | /git/blog/index.php |default/indexController.php的datail() 方法不存在
+2013-09-17 17:15:13 | ::1 | /git/blog/index.php |default/indexController.php的datail() 方法不存在
+2013-09-17 17:55:08 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-17 17:55:21 | ::1 | /git/blog/index.php |admin/homeModel.php 模型类不存在
+2013-09-17 17:55:44 | ::1 | /git/blog/index.php |admin/homeModel.php 模型类不存在

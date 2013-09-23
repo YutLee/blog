@@ -1,0 +1,36 @@
+<header class="header">
+	<div class="logo"><a href="">100msh</a></div>
+    <nav>
+    	<ul>
+        	<li>首页</li>
+            <li></li>
+        </ul>
+    </nav>
+    
+</header>
+<div id="content" class="content">
+	<header class="opened">
+    	<h1>100msh blog</h1>
+    </header>
+	<div class="wrapper blog-list">
+    	{{~it.lists :value}}
+    	<section>
+        	<h2>
+            	<a href="{{=value.link}}">{{=value.title}}</a>
+            </h2>
+            <div class="meta">
+                <p class="date">
+                    <time datetime="{{=value.created}}">{{=value.date}}</time>
+                </p>
+                <p class="likes">
+                    <span>{{=value.likes}}</span>
+                </p>
+            </div>
+        	<p class="preview">
+            {{=value.preview}}
+            <a href="{{=value.link}}">Read More</a>
+			</p>
+        </section>
+        {{~}}
+    </div>
+</div>

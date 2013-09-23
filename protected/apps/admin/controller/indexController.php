@@ -1,0 +1,91 @@
+<?php
+class indexController extends commonController
+{ 
+    public function index() {
+		$lists = model('home')->getLists();	//查询所有文章
+		for($i = 0; $i < count($lists); $i++) {
+			$lists[$i]['date'] = date('Y/m/d', strtotime($lists[$i]['created']));
+			$lists[$i]['link'] = url('index/detail') . '&id=' . $lists[$i]['id'];
+		}
+		$data = array(
+			'0' =>	array('lists' => $lists)
+		);
+		$temp_url = array(
+			'0' => 'html/home'
+		);
+		$mod = array(
+			'0' => '#mod_index'
+		);
+
+		$result = array(
+			'temp_url' => $temp_url,
+			'mod'      => $mod,
+			'data'	   => $data,
+			'js_url'   => array(__APPVIEW__ .'/js/home.js')
+		);
+		$this->loadPage($result);
+    }
+	
+	public function detail() {
+		$id = $_GET['id'];
+		$data = model('home')->getDetail($id);	//根据id查询文章
+		$data[0]['date'] = date('Y/m/d', strtotime($data[0]['created']));
+
+		$temp_url = array(
+			'0' => 'html/detail'
+		);
+		$mod = array(
+			'0' => '#mod_index'
+		);
+		$result = array(
+			'temp_url' => $temp_url,
+			'data'     => $data,
+			'mod'      => $mod
+		);
+		$this->loadPage($result);	
+    }
+	
+	public function add() {
+		
+		$data = array(
+			'0' => ''
+		);
+		
+		$temp_url = array(
+			'0' => 'html/add'
+		);
+		$mod = array(
+			'0' => '#mod_index'
+		);
+		$result = array(
+			'temp_url' => $temp_url,
+			'data'     => $data,
+			'mod'      => $mod,
+			'js_url'   => array(__APPVIEW__ .'/js/add.js')
+		);
+		$this->loadPage($result);	
+    }
+	
+	public function insert() {
+		$data = array(
+			'title' => $_POST['title'],
+			'preview' => $_POST['body'],
+			'body' => $_POST['body']
+		);
+		$r = model('home')->add( $data );
+		$errorTip = '';
+		$successTip = '';
+		$r ? $errorTip = '添加文章失败' : $successTip = '添加文章成功';
+		$error = array(
+			'url' => url('index'),
+			'error_tip' => $errorTip,
+			'success_tip' => $r
+		);
+
+		$result = array(
+			'error' => $error
+		);
+		$this->loadPage($result);	
+    }
+}
+?>
