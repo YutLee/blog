@@ -42,8 +42,8 @@ class commonController extends baseController
 	public function getRequest() {
 		$headers = getallheaders();
 		$request = array(
-			'temps' => explode(',', $headers['Temps']),
-			'no_exist' => explode(',', $headers['NoExist'])
+			'temps' => explode(',', $headers['temps']),
+			'no_exist' => explode(',', $headers['no-exist'])
 		);
 		return $request;
 	}
@@ -96,7 +96,8 @@ class commonController extends baseController
 			'temp_id'  => $temp_id,
 			'temp'     => $temp,
 			'data'	   => $data_data,
-			'mod'      => $mod
+			'mod'      => $mod,
+			'c'=>getallheaders()['no-exist']
 		);
 		$merge_data = array_merge($data, $new_data);
 		foreach($merge_data['data'] as $key => $value) {

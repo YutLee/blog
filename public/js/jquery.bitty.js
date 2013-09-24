@@ -415,16 +415,16 @@
 			that.refreshPageCache(url);
 
 			if(temps && temps != '') {
-				that.headers['Temps'] = that.pageCache[url]['temps'] = that.pageCache[url]['reTemps'] = temps;
+				that.headers['temps'] = that.pageCache[url]['temps'] = that.pageCache[url]['reTemps'] = temps;
 				noExist = arrayDiff(temps.split(','), that.tempUrlCache);
-				that.headers['No-Exist'] = noExist.join(',');
+				that.headers['no-exist'] = noExist.join(',');
 			}else if(that.pageCache[url]['reTemps']) {
-				that.headers['Temps'] = that.pageCache[url]['reTemps'];
+				that.headers['temps'] = that.pageCache[url]['reTemps'];
 				noExist = arrayDiff(that.pageCache[url]['reTemps'].split(','), that.tempUrlCache);
-				that.headers['No-Exist'] = noExist.join(',');
+				that.headers['no-exist'] = noExist.join(',');
 			}else {
-				that.headers['Temps'] = '';
-				that.headers['No-Exist'] = 'none';
+				that.headers['temps'] = '';
+				that.headers['no-exist'] = 'none';
 			}
 			console.log('需要请求的数据', that.headers);
 		},
@@ -459,7 +459,7 @@
 			}
 		},
 		/**
-		 * 设置发送的头部信息
+		 * ajax请求Json数据
 		 * @param {string} options 必须
 		 * @private
 		 */
@@ -481,6 +481,7 @@
 				headers: that.headers,
 				data: o.data,
 				beforeSend: function() {
+					that.latestRequest = o.url;
 					if(isFunction(that.loading.beforeSend)) {
 						var mods = that.headers.Temps ? arrayDiff(that.currentUrlCache, that.headers.Temps.split(',')) : that.currentUrlCache;
 						var i = 0, len = mods.length;	
@@ -489,19 +490,21 @@
 						}
 						that.loading.beforeSend.call(that.loading, newMods);
 					}
-					if(o.isHistory) {
-						History.pushState('', o.title, o.url);
-						History.replaceState('', o.title, o.url);
-					}
 				},
 				success: function(data) {
-					that.isLinkClick = false;
-					if(isFunction(that.loading.success)) {
-						that.loading.success.call(that.loading, newMods);
-					}
-					that.loadPage(o.url, data);
-					if(isFunction(o.callback)) {
-						o.callback.call(that, data);	
+					if(that.latestRequest === o.url) {
+						if(o.isHistory) {
+							History.pushState('', o.title, o.url);
+							History.replaceState('', o.title, o.url);
+						}
+						that.isLinkClick = false;
+						if(isFunction(that.loading.success)) {
+							that.loading.success.call(that.loading, newMods);
+						}
+						that.loadPage(o.url, data);
+						if(isFunction(o.callback)) {
+							o.callback.call(that, data);	
+						}
 					}
 				},
 				error: function(xhr) {
@@ -548,7 +551,7 @@
 			});	
 		},
 		/**
-		 * 设置发送的头部信息
+		 * 表单提交
 		 * @param {string} formId 可缺省，表单id；缺省时 submitId 参数必填
 		 * @param {string} submitId 可缺省，提交的按钮；缺省时 formId 参数必填
 		 * @param {string} url 可缺省，提交的地址；缺省时默认提交到当前地址或表单的 action 属性地址
