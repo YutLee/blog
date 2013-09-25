@@ -1,0 +1,4 @@
+2013-09-25 13:03:49 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in ()<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1<br>
+					<b>错误代码</b>:1064<br>
