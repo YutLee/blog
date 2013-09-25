@@ -84,14 +84,38 @@ class indexController extends commonController
 			'preview' => $_POST['body'],
 			'body' => $_POST['body']
 		);
-		$r = model('home')->add( $data );
+		
+		$id = model('home')->add( $data );
+		
 		$errorTip = '';
 		$successTip = '';
-		$r ? $errorTip = '添加文章失败' : $successTip = '添加文章成功';
+		$id ? $successTip = '添加文章成功' : $errorTip = '添加文章失败';
+		$error = array(
+			'url' => url('index/detail') . '&id=' . $id,
+			'error_tip' => $errorTip,
+			'success_tip' => $successTip
+		);
+
+		$result = array(
+			'error' => $error
+		);
+		$this->loadPage($result);	
+    }
+	
+	public function delete() {
+		
+		$id = $_POST['id'];
+		$id = implode(',', $id);
+		
+		$row = model('home')->delete('delete from blog where id in (' . $id . ')');
+		
+		$errorTip = '';
+		$successTip = '';
+		$row > 0 ? $successTip = '删除文章成功' . $id : $errorTip = '删除文章失败';
 		$error = array(
 			'url' => url('index'),
 			'error_tip' => $errorTip,
-			'success_tip' => $r
+			'success_tip' => $successTip
 		);
 
 		$result = array(

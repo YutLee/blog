@@ -21,7 +21,12 @@ class homeModel extends baseModel
 	
 	public function add( $data ) 
 	{
-		$this->insert($data);	
+		return $this->insert($data);	
+	}
+	
+	public function delete( $data ) 
+	{
+		return $this->query($data);	
 	}
     
 }

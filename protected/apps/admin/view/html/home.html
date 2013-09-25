@@ -1,16 +1,18 @@
 <div class="content">
+	<form method="post" id="home" action="index.php?r=admin/index/delete">
 	<header class="main-menu">
     	<h2>
         	文章列表
         	<em></em>
         </h2>
         <div class="top-menu">
+        	
             <ul>
-            	<li><a href="">返回</a></li>
-            	<li><a href="">刷新</a></li>
-                <li><a href="">添加</a></li>
-                <li><a href="">删除</a></li>
+            	<li><a href="javascript:app.bitty.refresh();">刷新</a></li>
+                <li><a href="index.php?r=admin/index/add">添加</a></li>
+                <li><input type="submit" value="删除" id="dele" /></li>
             </ul>
+            
             <div class="search">
             	<input type="text" placeholder="Search..." />
             </div>
@@ -31,7 +33,7 @@
             	<tbody>
                 	{{~it.lists :value}}
                 	<tr class="" data-link="{{=value.link}}">
-                    	<td><input type="checkbox" name="{{=value.id}}" /></td>
+                    	<td><input type="checkbox" name="id[]" value="{{=value.id}}" /></td>
                         <td><div class="yw">{{=value.title}}</div></td>
                         <td>{{=value.preview}}</td>
                         <td class="tc">{{=value.likes}}</td>
@@ -42,4 +44,5 @@
             </table>
         </div>
     </div>
+    </form>
 </div>

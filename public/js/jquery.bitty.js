@@ -68,18 +68,34 @@
 				el.css({'left': left, 'visibility': 'visible', 'display': 'none'}).fadeIn(animTime || that.animTime);
 				if(delay !== 'none') {
 					play = setTimeout(function() {
+						that.close = function() {
+							that._close();
+						};
 						that.close();
 					}, delay || that.delay);	
 				}
 			}
 		},
-		/** 关闭提示 */
-		close: function() {
+		/** 
+		 * 私有方法，关闭提示 
+		 * @private
+		 */
+		_close: function() {
 			var that = this;
 			that.element.fadeOut(that.animTime, function() {
 				that.element.remove();
 				that.status = false;
 			});
+		},
+		/** 关闭提示 */
+		close: function() {
+			this._close();
+		},
+		/** 销毁tooltip对象 */
+		destroy: function() {
+			var that = this;
+			that.close = function() {};
+			that.status = false;
 		},
 		/**  
 		 * 出错提示
@@ -248,6 +264,47 @@
 			return path.replace(this.dominRegExp, '').replace(/[^(\-|\w)]/g, '-');
 		},
 		/**
+		 * 初始化
+		 * @param {string} url 必须，新页面地址
+		 * @param {Json} data 必须，新页面数据和模板
+		 */
+		init: function(url, data) {
+			var that = this,
+				tempId = data.temp_id,
+				error = data.error;
+
+			if(isObject(tempId)) {
+				var allTemps = data.temp_url;
+				var diff = that.currentUrlCache.length > 0 ? arrayDiff(that.currentUrlCache, allTemps) : allTemps;
+				var k = 0, 
+					l = diff.length;
+				
+				url = url.replace(that.dominRegExp, '');	//删除网址域名，减少缓存变量名的长度
+				if(!that.pageCache[url]) {
+					that.pageCache[url] = {};
+				}
+				if(!that.pageCache[url]['temps']) {
+					that.pageCache[url]['temps'] = allTemps.join(',');
+				}
+				if(!that.pageCache[url]['allTemps']) {
+					that.pageCache[url]['allTemps'] = allTemps.join(',');
+				}
+				
+				that.currentUrlCache = allTemps;
+
+				for(var key in tempId) {	//遍历需要更新的模板
+					var value = tempId[key],
+						id = that.replacePath(value),
+						html;
+					if(!that.tempCache[value] && !isFunction(that.tempCache[value])) {
+						that.tempCache[value] = doT.template(data.temp[key]);
+						that.tempUrlCache.push(value);
+					}
+				}
+			}
+			that.bindLink();
+		},
+		/**
 		 * 加载页面
 		 * @param {string} url 必须，新页面地址
 		 * @param {Json} data 必须，新页面数据和模板
@@ -262,15 +319,15 @@
 					that.request({url: error.url, title: error.title});
 				}
 				if(isString(error.error_tip) && trim(error.error_tip) != '') {
-					app.tooltip.status = false;
+					app.tooltip.destroy();
 					app.tooltip.error(error.error_tip);
 				}
 				if(isString(error.success_tip) && trim(error.success_tip) != '') {
-					app.tooltip.status = false;
-					app.tooltip.success(error.success_tip);
+					app.tooltip.destroy();
+					app.tooltip.success(error.success_tip, 3000);
 				}
 				if(isString(error.warning_tip) && trim(error.warning_tip) != '') {
-					app.tooltip.status = false;
+					app.tooltip.destroy();
 					app.tooltip.warning(error.warning_tip);
 				}
 				return false;
@@ -279,7 +336,8 @@
 			if(isObject(tempId)) {
 				var allTemps = data.temp_url;
 				var diff = that.currentUrlCache.length > 0 ? arrayDiff(that.currentUrlCache, allTemps) : allTemps;
-				var k = 0, 
+				var allTempsLen = allTemps.length,
+					k = 0, 
 					l = diff.length;
 
 				for(; k < l; k++) {
@@ -304,7 +362,8 @@
 				that.currentUrlCache = allTemps;
 
 				for(var key in tempId) {	//遍历需要更新的模板
-					var value = tempId[key],
+					var idx = parseInt(key.replace(/[^\d]/g, '')), 
+						value = tempId[key],
 						id = that.replacePath(value),
 						html;
 					if(!that.tempCache[value] && !isFunction(that.tempCache[value])) {
@@ -317,10 +376,30 @@
 						$('#' + id).remove();	//删除要替换的已存在当前页面的模块
 						console.log('删除要替换的已存在当前页面的模块' + id);
 					}
+
+					insertHtml(idx);
 					
-					$(data.mod[key]).append($('<div id="' + id +'"/>').html(html));
+					//获取需要插入位置的id
+					function insertHtml(idx) {
+						idx -= 1;
+						if(idx < 0) {
+							$(data.mod[key]).prepend($('<div id="' + id +'"/>').html(html));
+						}else {
+							var existId = that.replacePath(allTemps[idx]),
+								prevId = $(data.mod[key]).find('#' + existId);
+							if(prevId.length === 1) {
+								prevId.after($('<div id="' + id +'"/>').html(html));
+							}else {
+								insertHtml(idx - 1);
+							}
+						}
+					}
+					
 					console.log('载人新模块："' + id + '"');
 				}
+				
+				
+				
 				that.loadCss(data.css_url);
 				that.loadJs(data.js_url);
 			}
@@ -408,6 +487,8 @@
 				newTemps,
 				noExist;
 			
+			url = url.replace(that.dominRegExp, '');	//删除网址域名，减少缓存变量名的长度
+			
 			if(!that.pageCache[url]) {
 				that.pageCache[url] = {};
 			}
@@ -415,16 +496,16 @@
 			that.refreshPageCache(url);
 
 			if(temps && temps != '') {
-				that.headers['temps'] = that.pageCache[url]['temps'] = that.pageCache[url]['reTemps'] = temps;
+				that.headers['Temps'] = that.pageCache[url]['temps'] = that.pageCache[url]['reTemps'] = temps;
 				noExist = arrayDiff(temps.split(','), that.tempUrlCache);
-				that.headers['no-exist'] = noExist.join(',');
+				that.headers['No-Exist'] = noExist.join(',');
 			}else if(that.pageCache[url]['reTemps']) {
-				that.headers['temps'] = that.pageCache[url]['reTemps'];
+				that.headers['Temps'] = that.pageCache[url]['reTemps'];
 				noExist = arrayDiff(that.pageCache[url]['reTemps'].split(','), that.tempUrlCache);
-				that.headers['no-exist'] = noExist.join(',');
+				that.headers['No-Exist'] = noExist.join(',');
 			}else {
-				that.headers['temps'] = '';
-				that.headers['no-exist'] = 'none';
+				that.headers['Temps'] = '';
+				that.headers['No-Exist'] = 'none';
 			}
 			console.log('需要请求的数据', that.headers);
 		},
@@ -490,13 +571,13 @@
 						}
 						that.loading.beforeSend.call(that.loading, newMods);
 					}
+					if(o.isHistory) {
+						History.pushState('', o.title, o.url);
+						History.replaceState('', o.title, o.url);
+					}
 				},
 				success: function(data) {
 					if(that.latestRequest === o.url) {
-						if(o.isHistory) {
-							History.pushState('', o.title, o.url);
-							History.replaceState('', o.title, o.url);
-						}
 						that.isLinkClick = false;
 						if(isFunction(that.loading.success)) {
 							that.loading.success.call(that.loading, newMods);
@@ -507,8 +588,8 @@
 						}
 					}
 				},
-				error: function(xhr) {
-					console.error(xhr);	
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					console.error(textStatus, errorThrown);	
 				}
 			});
 		},
@@ -533,6 +614,12 @@
 			//url = url.replace(/[\u4e00-\u9fa5]/g, encodeURIComponent('$0', true));	//对中文进行编码
 			that.setHeaders(o.url, o.temps);
 			that.ajax({url: o.url, isHistory: o.isHistory, title: o.title, callback: o.callback});
+		},
+		/**
+		 * 刷新当前页面
+		 */
+		refresh: function() {
+			this.request({url: window.location.href});
 		},
 		/**
 		 * 绑定<a>链接点击事件
@@ -580,11 +667,6 @@
 				}else {
 					var button = $('#' + o.submitId);	
 					o.formId = button.closest('form')[0];
-					button.bind({
-						'click.submit': function() {
-							return false;	
-						}
-					});
 				}
 			}
 			var $form = isString(o.formId) ? $('#' + o.formId) : $(o.formId);
@@ -613,6 +695,7 @@
 			that.isLinkClick = true;
 			that.setHeaders(o.url, o.temps);
 			that.ajax({url: o.url, type: o.method, data: data, isHistory: o.isHistory, title: o.title, callback: o.callback});
+			return false;
 		}
 	};
 	

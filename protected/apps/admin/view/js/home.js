@@ -29,3 +29,10 @@ $('thead tr').children('th').eq(0).find('input[type=checkbox]').bind({
 				$t.removeAttr('checked').closest('thead').next('tbody').find('input[type=checkbox][checked=checked]').click();
 	}
 });
+
+$('#dele').bind({
+	'click': function() {
+		app.bitty.ajaxForm({formId: 'home'});
+		return false;
+	}	
+});

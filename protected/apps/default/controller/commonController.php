@@ -42,8 +42,8 @@ class commonController extends baseController
 	public function getRequest() {
 		$headers = getallheaders();
 		$request = array(
-			'temps' => explode(',', $headers['temps']),
-			'no_exist' => explode(',', $headers['no-exist'])
+			'temps' => explode(',', $headers['Temps']),
+			'no_exist' => explode(',', $headers['No-Exist'])
 		);
 		return $request;
 	}

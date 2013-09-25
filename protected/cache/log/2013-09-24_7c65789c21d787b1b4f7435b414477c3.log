@@ -1,0 +1,32 @@
+2013-09-24 11:45:00 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-24 11:45:50 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-24 11:47:22 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-24 11:48:53 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-24 15:55:17 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in (Array)<br>
+					<b>错误详情</b>: Unknown column 'Array' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-24 16:09:51 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in ()<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-24 16:10:14 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in (undefined)<br>
+					<b>错误详情</b>: Unknown column 'undefined' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-24 16:22:54 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in ()<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1<br>
+					<b>错误代码</b>:1064<br>
