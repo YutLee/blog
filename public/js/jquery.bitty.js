@@ -1,140 +1,4 @@
 /**
- * jQuery tooltip v1.0
- * @license Copyright 2013
- * 
- * Date 2013-7-16
- * Update 2013-9-12 T11:14
- */
-(function($, window, undefined) {
-	//'use strict';
-	var play,
-		/** 
-		 * 应用程序 
-		 * @namespace 
-		 */
-		app = window.app = window.app || {};
-	
-	/**
-	 * tooltip 对象
-	 * @namespace 
-	 */
-	app.tooltip = {
-		/** 
-		 * 标志提示工具状态 
-		 * @type {boolean}
-		 * @private
-		 */
-		status: false,
-		/** 
-		 * 定义全局动画时间 
-		 * @type {number}
-		 */
-		animTime: 300,
-		/** 
-		 * 定义全局提示工具显示时间 
-		 * @type {number}
-		 */
-		delay: 5000,
-		/**  
-		 * 显示要提示的内容
-		 * @param {string} type 提示的类型
-		 * @param {string} msg 需要提示的内容
-		 * @param {string} delay 提示的动画时长
-		 * @param {string} animTime 显示提示内容的时长
-		 * @example 
-		 * app.tooltip.tip('success', '^_^ 这是一个成功提示。');
-		 * @example 
-		 * app.tooltip.tip('error', '+_+? 这是另一个出错提示。', 3000, 200);
-		 */
-		tip: function(type, msg, delay, animTime) {
-			var that = this;
-			clearTimeout(play);
-			if(!that.status) {
-				if(that.element) {
-					that.element.remove();	
-					that.status = true;
-				}
-				var left, top,
-					el = that.element = $('<div class="ajax_build_tip ' + type + '" />').html(msg);
-				if(el.css('position') !== 'absolute') {
-					el.css({'position': 'absolute'});
-				}
-				if(!el.css('top')) {
-					el.css({'top': '30'});
-				}
-				
-				$('body').append(el.css({'visibility': 'hidden', 'display': 'block'}));
-				left = ($(window).width() - el.outerWidth()) * .5;
-				el.css({'left': left, 'visibility': 'visible', 'display': 'none'}).fadeIn(animTime || that.animTime);
-				if(delay !== 'none') {
-					play = setTimeout(function() {
-						that.close = function() {
-							that._close();
-						};
-						that.close();
-					}, delay || that.delay);	
-				}
-			}
-		},
-		/** 
-		 * 私有方法，关闭提示 
-		 * @private
-		 */
-		_close: function() {
-			var that = this;
-			that.element.fadeOut(that.animTime, function() {
-				that.element.remove();
-				that.status = false;
-			});
-		},
-		/** 关闭提示 */
-		close: function() {
-			this._close();
-		},
-		/** 销毁tooltip对象 */
-		destroy: function() {
-			var that = this;
-			that.close = function() {};
-			that.status = false;
-		},
-		/**  
-		 * 出错提示
-		 * @param {string} msg 需要提示的内容
-		 * @param {string} delay 提示的动画时长
-		 * @param {string} animTime 显示提示内容的时长
-		 * @example 
-		 * app.tooltip.error('+_+? 出错提示。');
-		 */
-		error: function(msg, delay, animTime) {
-			this.tip('error', msg, delay, animTime);
-		},
-		/**  
-		 * 成功提示
-		 * @param {string} msg 需要提示的内容
-		 * @param {string} delay 提示的动画时长
-		 * @param {string} animTime 显示提示内容的时长
-		 * @example 
-		 * app.tooltip.error('^_^ 成功提示。');
-		 */
-		success: function(msg, delay, animTime) {
-			this.tip('success', msg, delay, animTime);
-		},
-		/**  
-		 * 警告提示
-		 * @param {string} msg 需要提示的内容
-		 * @param {string} delay 提示的动画时长
-		 * @param {string} animTime 显示提示内容的时长
-		 * @example 
-		 * app.tooltip.error('*_*! 出错提示。');
-		 */
-		warning: function(msg, delay, animTime) {
-			this.tip('warning', msg, delay, animTime);
-		}
-	};
-})(jQuery, window);
-
-
-/**
  * jQuery bitty v1.0
  * @license Copyright 2013
  * 
@@ -145,7 +9,7 @@
  * @see https://github.com/olado/doT 
  *
  * Date 2013-8-23
- * Update 2013-8-23
+ * Update 2013-9-26
  */
 
 (function ($, window, undefined) {
@@ -253,7 +117,8 @@
 		 * @type {Object}
 		 */
 		headers: {
-			'Accept': 'application/json'
+			'Accept': 'application/json',
+			'X-Referer': window.location.href
 		},
 		/**
 		 * 替换文件路径为合法 html标签 ID
@@ -270,8 +135,7 @@
 		 */
 		init: function(url, data) {
 			var that = this,
-				tempId = data.temp_id,
-				error = data.error;
+				tempId = data.temp_id;
 
 			if(isObject(tempId)) {
 				var allTemps = data.temp_url;
@@ -312,23 +176,23 @@
 		loadPage: function(url, data) {
 			var that = this,
 				tempId = data.temp_id,
-				error = data.error;
+				hint = data.hint;
 
-			if(isObject(error)) {
-				if(isString(error.url)) {
-					that.request({url: error.url, title: error.title});
+			if(isObject(hint)) {
+				if(isString(hint.url)) {
+					that.request({url: hint.url, title: hint.title});
 				}
-				if(isString(error.error_tip) && trim(error.error_tip) != '') {
+				if(isString(hint.error_tip) && trim(hint.error_tip) != '') {
 					app.tooltip.destroy();
-					app.tooltip.error(error.error_tip);
+					app.tooltip.error(hint.error_tip);
 				}
-				if(isString(error.success_tip) && trim(error.success_tip) != '') {
+				if(isString(hint.success_tip) && trim(hint.success_tip) != '') {
 					app.tooltip.destroy();
-					app.tooltip.success(error.success_tip, 3000);
+					app.tooltip.success(hint.success_tip, 3000);
 				}
-				if(isString(error.warning_tip) && trim(error.warning_tip) != '') {
+				if(isString(hint.warning_tip) && trim(hint.warning_tip) != '') {
 					app.tooltip.destroy();
-					app.tooltip.warning(error.warning_tip);
+					app.tooltip.warning(hint.warning_tip);
 				}
 				return false;
 			}
@@ -377,8 +241,6 @@
 						console.log('删除要替换的已存在当前页面的模块' + id);
 					}
 
-					insertHtml(idx);
-					
 					//获取需要插入位置的id
 					function insertHtml(idx) {
 						idx -= 1;
@@ -394,6 +256,8 @@
 							}
 						}
 					}
+					
+					insertHtml(idx);
 					
 					console.log('载人新模块："' + id + '"');
 				}
@@ -571,13 +435,13 @@
 						}
 						that.loading.beforeSend.call(that.loading, newMods);
 					}
-					if(o.isHistory) {
-						History.pushState('', o.title, o.url);
-						History.replaceState('', o.title, o.url);
-					}
 				},
 				success: function(data) {
 					if(that.latestRequest === o.url) {
+						if(o.isHistory) {
+							History.pushState('', o.title, o.url);
+							History.replaceState('', o.title, o.url);
+						}
 						that.isLinkClick = false;
 						if(isFunction(that.loading.success)) {
 							that.loading.success.call(that.loading, newMods);
@@ -589,7 +453,7 @@
 					}
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					console.error(textStatus, errorThrown);	
+					console.error(textStatus);	
 				}
 			});
 		},
@@ -607,13 +471,15 @@
 					temps: '',
 					isHistory: true,
 					title: document.title,
+					type: 'GET',
+					data: null,
 					callback: null
 				}, options || {});
 
 			that.isLinkClick = true;
 			//url = url.replace(/[\u4e00-\u9fa5]/g, encodeURIComponent('$0', true));	//对中文进行编码
 			that.setHeaders(o.url, o.temps);
-			that.ajax({url: o.url, isHistory: o.isHistory, title: o.title, callback: o.callback});
+			that.ajax({url: o.url, isHistory: o.isHistory, title: o.title, type: o.type, data: o.data, callback: o.callback});
 		},
 		/**
 		 * 刷新当前页面

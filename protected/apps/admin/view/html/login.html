@@ -1,0 +1,13 @@
+<div class="login">
+    <form class="overlay" action="" method="post" id="login">
+        <hgroup>
+            <a class="logo" href="/">blog</a>
+            <h1>Hello. Sign in.</h1>
+        </hgroup>
+        <div class="field required field-email"><label for="id_email">User name</label><input type="text" name="name" id="id_email" placeholder="User name"></div>
+        <div class="field required field-password"><label for="id_password">Password</label><input type="password" name="password" id="id_password" placeholder="Password"></div>
+        <div class="field buttons">
+            <button type="submit" onclick="app.bitty.ajaxForm({formId: 'login'});">Login</button>
+        </div>
+    </form>
+</div>

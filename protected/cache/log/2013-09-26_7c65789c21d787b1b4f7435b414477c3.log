@@ -1,0 +1,22 @@
+2013-09-26 11:31:21 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:31:27 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:32:20 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:32:55 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:35:20 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:35:21 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:36:02 | ::1 | /git/blog/index.php |admin/loginController.php 控制器类不存在
+2013-09-26 11:36:05 | ::1 | /git/blog/index.php |admin/userController.php 控制器类不存在
+2013-09-26 11:36:18 | ::1 | /git/blog/index.php |admin/userController.php 控制器类不存在
+2013-09-26 11:36:30 | ::1 | /git/blog/index.php |admin/userController.php 控制器类不存在
+2013-09-26 12:07:07 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM user  WHERE name=$name and password=$passwd<br>
+					<b>错误详情</b>: Unknown column '$name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-26 12:33:14 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM user  WHERE name=$name and password=$passwd<br>
+					<b>错误详情</b>: Unknown column '$name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-26 12:33:48 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM user  WHERE name=1645` and password=1654<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '` and password=1654' at line 1<br>
+					<b>错误代码</b>:1064<br>

@@ -28,6 +28,7 @@
                         <th>预览</th>
                         <th class="num">喜爱</th>
                         <th class="date">日期</th>
+                        <th class="date">操作</th>
                     </tr>
                 </thead>
             	<tbody>
@@ -35,9 +36,10 @@
                 	<tr class="" data-link="{{=value.link}}">
                     	<td><input type="checkbox" name="id[]" value="{{=value.id}}" /></td>
                         <td><div class="yw">{{=value.title}}</div></td>
-                        <td>{{=value.preview}}</td>
+                        <td><div class="pw">{{=value.preview}}</div></td>
                         <td class="tc">{{=value.likes}}</td>
                         <td class="tc" title="{{=value.created}}">{{=value.date}}</td>
+                        <td><a href="index.php?r=admin/index/detail&id={{=value.id}}">编辑</a></td>
                     </tr>
                     {{~}}
                 </tbody>

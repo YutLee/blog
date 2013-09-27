@@ -7,7 +7,6 @@ class homeModel extends baseModel
     {
         parent::__construct(  );
     }
-
     
     public function getLists( )
     {

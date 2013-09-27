@@ -1,7 +1,13 @@
 <?php
 class indexController extends commonController
-{ 
-    public function index() {
+{ 	
+
+	public function __construct() {
+		parent::__construct();              		
+		$this->isLogin();
+	}
+	
+	public function index() {
 		$lists = model('home')->getLists();	//查询所有文章
 		for($i = 0; $i < count($lists); $i++) {
 			$lists[$i]['date'] = date('Y/m/d', strtotime($lists[$i]['created']));
@@ -84,20 +90,22 @@ class indexController extends commonController
 			'preview' => $_POST['body'],
 			'body' => $_POST['body']
 		);
-		
-		$id = model('home')->add( $data );
-		
 		$errorTip = '';
 		$successTip = '';
+		
+		if($data['title']) {}
+		
+		$id = model('home')->add( $data );
+
 		$id ? $successTip = '添加文章成功' : $errorTip = '添加文章失败';
-		$error = array(
+		$hint = array(
 			'url' => url('index/detail') . '&id=' . $id,
 			'error_tip' => $errorTip,
 			'success_tip' => $successTip
 		);
 
 		$result = array(
-			'error' => $error
+			'hint' => $hint
 		);
 		$this->loadPage($result);	
     }
@@ -112,14 +120,14 @@ class indexController extends commonController
 		$errorTip = '';
 		$successTip = '';
 		$row > 0 ? $successTip = '删除文章成功' . $id : $errorTip = '删除文章失败';
-		$error = array(
+		$hint = array(
 			'url' => url('index'),
 			'error_tip' => $errorTip,
 			'success_tip' => $successTip
 		);
 
 		$result = array(
-			'error' => $error
+			'hint' => $hint
 		);
 		$this->loadPage($result);	
     }

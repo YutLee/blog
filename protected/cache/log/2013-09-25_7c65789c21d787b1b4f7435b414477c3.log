@@ -2,3 +2,69 @@
 					<b>SQL</b>: delete from blog where id in ()<br>
 					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1<br>
 					<b>错误代码</b>:1064<br>
+2013-09-25 18:16:56 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name=&password=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '&password=' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-25 18:18:56 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name= and password=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'and password=' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-25 18:19:00 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name= and password=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'and password=' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2013-09-25 18:19:33 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name=tony and password=tonyamdin53<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:20:36 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name=tony and password=tonyblog53<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:22:18 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name=tony and password=tonyblog53<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:23:37 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name=tony<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:23:43 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name=tony<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:24:12 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name="tony"<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:24:33 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name='tony'<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:24:35 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name='tony'<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:24:37 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name='tony'<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:25:31 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE name =  'tony'<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:26:02 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog WHERE name = 'tony'<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:26:04 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog WHERE name = 'tony'<br>
+					<b>错误详情</b>: Unknown column 'name' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2013-09-25 18:27:59 | ::1 | /git/blog/index.php |admin/userModel.php 模型类不存在
+2013-09-25 18:28:00 | ::1 | /git/blog/index.php |admin/userModel.php 模型类不存在
+2013-09-25 18:30:28 | ::1 | /git/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM user  WHERE name=tony and password=tonyblog53<br>
+					<b>错误详情</b>: Unknown column 'tony' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>

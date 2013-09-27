@@ -3,9 +3,12 @@
 class commonController extends baseController
 {
 	public $layout = '';
+	public $HEADERS;
+	
 	public function __construct() {
 		parent::__construct();              		
 		@session_start();//开启session
+		$this->HEADERS = getallheaders();
 	}
 
 	public function loadhtml() {
@@ -31,8 +34,7 @@ class commonController extends baseController
 	 * @return {Boolean} 返回true则是首次加载
 	 */
 	public function isFirstLoading() {
-		$headers = getallheaders();
-		return ($headers['Accept'] == 'application/json') ? false : true;
+		return ($this->HEADERS['Accept'] == 'application/json') ? false : true;
 	}
 	
 	/**
@@ -40,10 +42,9 @@ class commonController extends baseController
 	 * @return {Object} 返回客户端请求的数据
 	 */
 	public function getRequest() {
-		$headers = getallheaders();
 		$request = array(
-			'temps' => explode(',', $headers['Temps']),
-			'no_exist' => explode(',', $headers['No-Exist'])
+			'temps' => explode(',', $this->HEADERS['Temps']),
+			'no_exist' => explode(',', $this->HEADERS['No-Exist'])
 		);
 		return $request;
 	}
@@ -54,11 +55,11 @@ class commonController extends baseController
 	 */
 	public function loadPage($data) {
 		$temp_url = $data['temp_url'];
-		$error = $data['error'];
+		$hint = $data['hint'];
 		
-		if($error) {
+		if($hint) {
 			$result = array(
-				'error' => $error
+				'hint' => $hint
 			);
 			$this->printJson($result);
 			return false;
@@ -127,6 +128,29 @@ class commonController extends baseController
 			$this->loadFrame($result);
 		}else {
 			echo $result;
+		}
+	}
+	
+	/** 检测登录 */
+	public function isLogin($isLoginPage = false) {
+		if(!isset($_SESSION['userid']) && !$isLoginPage) {
+			$hint = array(
+				'url' => __AAPP__ . '/user/login'
+			);
+			$result = array(
+				'hint' => $hint
+			);
+			$this->loadPage($result);
+			exit;
+		}else if(isset($_SESSION['userid']) && $isLoginPage) {
+			$hint = array(
+				'url' => __AAPP__
+			);
+			$result = array(
+				'hint' => $hint
+			);
+			$this->loadPage($result);
+			exit;
 		}
 	}
 }

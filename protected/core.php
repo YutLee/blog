@@ -243,6 +243,7 @@ function run(){
 		
 	try{
 		defined('__ROOT__') or define('__ROOT__', config('URL_HTTP_HOST') . rtrim(dirname($_SERVER["SCRIPT_NAME"]), '\\/'));
+		defined('__AAPP__') or define('__AAPP__', __ROOT__ . '/?r=' . APP_NAME);
 		defined('__PUBLIC__') or define('__PUBLIC__', __ROOT__ . '/' . 'public');
 		defined('__UPLOAD__') or define('__UPLOAD__', __ROOT__ . '/' . 'upload');
 		$tems=config(TPL_TEMPLATE_PATH);
