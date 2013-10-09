@@ -466,7 +466,10 @@
 							that.loading.success.call(that.loading, newMods);
 						}
 						if(isFunction(o.callback)) {
-							o.callback.call(that, data);	
+							var callback = o.callback.call(that, data);
+							if(!callback) {
+								return false;	
+							}
 						}
 						that.loadPage(o.url, data);
 					}

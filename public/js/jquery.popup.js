@@ -133,6 +133,7 @@ var Popup = window.Popup = (function() {
 						bt.loadCss(data.css_url);
 						bt.loadJs(data.js_url);
 						add(that);
+						return false;
 					}
 				});
 			},
