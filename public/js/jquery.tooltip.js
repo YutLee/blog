@@ -56,8 +56,8 @@
 				}
 				var left, top,
 					el = that.element = $('<div class="ajax_build_tip ' + type + '" />').html(msg);
-				if(el.css('position') !== 'absolute') {
-					el.css({'position': 'absolute'});
+				if(el.css('position') !== 'fixed') {
+					el.css({'position': 'fixed'});
 				}
 				if(!el.css('top')) {
 					el.css({'top': '30'});

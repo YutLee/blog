@@ -28,7 +28,7 @@
             </div>
         	<p class="preview">
             {{=value.preview}}
-            <a href="{{=value.link}}">Read More</a>
+            <a href="javascript:void(0);" onclick="new Popup({url: '{{=value.link}}', scrollTop: true}).open();return false;">Read More</a>
 			</p>
         </section>
         {{~}}

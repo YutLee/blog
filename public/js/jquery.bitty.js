@@ -271,6 +271,25 @@
 			//console.log('ajax请求页面模板id', that.pageCache);
 		},
 		/**
+		 * 获取数据并嵌套好html，供外部js调用
+		 * @param {Object} data Json数据
+		 * @return 返回套好的html
+		 */
+		getCompleteHtml: function (data) {
+			var that = this,
+				tempId = data.temp_id,
+				html = '';
+			for(var key in tempId) {
+				var value = tempId[key];
+				if(!that.tempCache[value] && !isFunction(that.tempCache[value])) {
+					that.tempCache[value] = doT.template(data.temp[key]);
+					that.tempUrlCache.push(value);
+				}
+				html += (isObject(data.data)) ? that.tempCache[value](data.data[key]) : that.tempCache[value]('');
+			}
+			return html;
+		},
+		/**
 		 * 加载页面javascript
 		 * @param {Array} url <script>标签的src属性
 		 * @private
@@ -446,10 +465,10 @@
 						if(isFunction(that.loading.success)) {
 							that.loading.success.call(that.loading, newMods);
 						}
-						that.loadPage(o.url, data);
 						if(isFunction(o.callback)) {
 							o.callback.call(that, data);	
 						}
+						that.loadPage(o.url, data);
 					}
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
