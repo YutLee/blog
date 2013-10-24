@@ -514,7 +514,7 @@
 		 */
 		bindLink: function() {
 			var that = this;
-			$('body').delegate('a[target!=_blank]', 'click', function() {
+			$('body').delegate('a:not([target=_blank],[target=_top],[target=_parent],[target=_self])', 'click', function() {
 				var t = $(this),
 					url = t.attr('href'),
 					temps = t.attr('data-temps'),
