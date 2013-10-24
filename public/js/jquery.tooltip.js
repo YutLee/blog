@@ -48,7 +48,7 @@
 		 */
 		tip: function(type, msg, delay, animTime) {
 			var that = this;
-			clearTimeout(play);
+			//clearTimeout(play);
 			if(!that.status) {
 				if(that.element) {
 					that.element.remove();	
@@ -86,6 +86,7 @@
 				that.element.remove();
 				that.status = false;
 			});
+			clearTimeout(play);
 		},
 		/** 关闭提示 */
 		close: function() {
