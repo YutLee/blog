@@ -20,7 +20,8 @@ var Popup = window.Popup = (function() {
 				width: 400,
 				height: 300,
 				animate: true,
-				full: null	
+				full: null,
+				style: ''	
 			}, options || {});
 			if(window.top.popup === undefined) {
 				window.top.popup = [];
@@ -119,6 +120,28 @@ var Popup = window.Popup = (function() {
 				window.top.popup.push(this);
 			},
 			tempHtml: [],
+			loadInto: function(options) {
+				var o = $.extend({
+						url: '',
+						temps: '',
+						successCall: null
+					}, options || {});
+				bt.request({
+					url: o.url,
+					temps: o.temps,
+					isHistory: false,
+					callback: function(data) {
+						html = bt.getCompleteHtml(data);
+						bt.loadCss(data.css_url);
+						bt.loadJs(data.js_url);
+						$container.html(html)
+						if(isFunction(o.successCall)) {
+							o.successCall.apply(that);
+						}
+						return false;
+					}
+				});
+			},
 			getData: function() {
 				var that = this,
 					bt = app.bitty;
@@ -133,6 +156,9 @@ var Popup = window.Popup = (function() {
 						bt.loadCss(data.css_url);
 						bt.loadJs(data.js_url);
 						add(that);
+						if(isFunction(that.options.successCall)) {
+							that.options.successCall.apply(that);
+						}
 						return false;
 					}
 				});
@@ -168,7 +194,13 @@ var Popup = window.Popup = (function() {
 				var that = this,
 					width = that.options.width,
 					height = that.options.height,
-					full = that.options.full;
+					full = that.options.full,
+					style = that.options.style;
+					
+				if($.trim(style) !== '') {
+					el.addClass(style);
+					$shadow.addClass(style);	
+				}
 				if(el.css('position') !== 'absolute') {
 					el.css({'position': 'absolute'})	
 				}
@@ -197,7 +229,7 @@ var Popup = window.Popup = (function() {
 					}	
 					if(height && height === 'auto') {
 						//el.css({'visibility': 'hidden', 'display': 'block', 'position': 'relative', 'height': 'auto', 'top': 'auto', 'bottom': 'auto'});
-						el.css({'height': el.height(), 'display': 'none', 'visibility': 'visible', 'position': 'absolute'});
+						el.css({'height': 'auto', 'display': 'none', 'visibility': 'visible', 'position': 'absolute'});
 					}else {
 						el.height(height);
 					}
@@ -208,7 +240,7 @@ var Popup = window.Popup = (function() {
 				var winWidth = $(window.top).width(),
 					winHeight = $(window.top).height(),
 					left = (winWidth - el.outerWidth()) * .5,
-					top = (winHeight - el.outerHeight()) * .5;
+					top = (winHeight - el.outerHeight()) * .5 + $(window).scrollTop();
 				left = left > 0 ? left : 0;
 				top = top > 0 ? top : 0;
 				el.animate({'left': left, top: top}, 100);
@@ -254,7 +286,7 @@ var Popup = window.Popup = (function() {
 					pa.css({'z-index': zIndex - 1});
 				}
 				if(that.options.scrollTop) {
-					$(window).scrollTop(0);	
+					//$(window).scrollTop(0);	
 				}
 				window.top.popupIframe.unshift(newIframe);
 				window.top.popupArray.push($temp);
@@ -289,7 +321,7 @@ var Popup = window.Popup = (function() {
 					});
 				}
 				if(that.options.scrollTop) {
-					$(window).scrollTop(0);	
+					//$(window).scrollTop(0);	
 				}
 			},
 			_close: function() {
@@ -318,7 +350,7 @@ var Popup = window.Popup = (function() {
 				tempNow = tempNow ? tempNow : $temp;
 				tempPrev = tempPrev ? tempPrev : $temp;
 				if($content) {
-					$content.appendTo($parent);	
+					$content.hide().appendTo($parent);	
 				}
 				tempNow.fadeOut();
 				if(len === 1) {
@@ -364,7 +396,7 @@ var Popup = window.Popup = (function() {
 					}
 				}
 				//$('body').css({'overflow': 'auto'});
-				$('html').css({'overflow': 'auto'});
+				$('html').css({'overflow-y': 'scroll'});
 			},
 			close: function() {
 				if(isArray(window.top.popup) && window.top.popup.length > 0) {
