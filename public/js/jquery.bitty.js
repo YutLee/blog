@@ -411,7 +411,7 @@
 			 * 加载前的回调函数
 			 * @param {Array} 页面上需要删除的模块的 id 数组
 			 */
-			beforeSend: function(mods) {
+			beforeSend: function(mods, url) {
 				//app.tooltip.warning(this.msg, 'none');
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().addClass('loading');
@@ -421,7 +421,7 @@
 			 * 加载成功的回调函数
 			 * @param {Array} 插入页面的模块的 id 数组
 			 */
-			success: function(mods) {
+			success: function(mods, url) {
 				//app.tooltip.close();
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().removeClass('loading');
@@ -458,7 +458,7 @@
 						for(; i < len; i++) {
 							newMods.push(that.replacePath(mods[i]));
 						}
-						that.loading.beforeSend.call(that.loading, newMods);
+						that.loading.beforeSend.call(that.loading, newMods, o.url);
 					}
 				},
 				success: function(data) {
@@ -469,7 +469,7 @@
 						}
 						that.isLinkClick = false;
 						if(isFunction(that.loading.success)) {
-							that.loading.success.call(that.loading, newMods);
+							that.loading.success.call(that.loading, newMods, o.url);
 						}
 						if(isFunction(o.callback)) {
 							var callback = o.callback.call(that, data);
