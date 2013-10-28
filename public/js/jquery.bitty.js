@@ -261,11 +261,17 @@
 					
 					console.log('载人新模块："' + id + '"');
 				}
-				
-				
-				
+
 				that.loadCss(data.css_url);
 				that.loadJs(data.js_url);
+				
+				//统一加载最后的js
+				if(isArray(that.finalJs)) {
+					for(var i = 0; i < that.finalJs; i++) {
+						that.finalJs[i] = that.finalJs[i].replace(that.dominRegExp, '');	
+					}
+					that.loadJs(that.finalJs);
+				}
 			}
 			//console.log('已缓存的模板', that.tempCache);
 			//console.log('ajax请求页面模板id', that.pageCache);
@@ -400,13 +406,13 @@
 			 * 加载中的提示信息
 			 * @type {string}
 			 */
-			msg: 'loading...',
+			msg: '加载中...',
 			/** 
 			 * 加载前的回调函数
 			 * @param {Array} 页面上需要删除的模块的 id 数组
 			 */
 			beforeSend: function(mods) {
-				app.tooltip.warning(this.msg, 'none');
+				//app.tooltip.warning(this.msg, 'none');
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().addClass('loading');
 				}
@@ -416,7 +422,7 @@
 			 * @param {Array} 插入页面的模块的 id 数组
 			 */
 			success: function(mods) {
-				app.tooltip.close();
+				//app.tooltip.close();
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().removeClass('loading');
 				}
@@ -473,6 +479,9 @@
 						}
 						that.loadPage(o.url, data);
 					}
+				},
+				complete: function() {
+					app.tooltip.close();
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
 					console.error(textStatus);	
