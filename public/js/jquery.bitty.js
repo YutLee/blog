@@ -382,8 +382,6 @@
 				that.pageCache[url] = {};
 			}
 			
-			that.refreshPageCache(url);
-
 			if(temps && temps != '') {
 				that.headers['Temps'] = that.pageCache[url]['temps'] = that.pageCache[url]['reTemps'] = temps;
 				noExist = arrayDiff(temps.split(','), that.tempUrlCache);
@@ -416,6 +414,7 @@
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().addClass('loading');
 				}
+				console.log(mods,'loading');
 			},
 			/** 
 			 * 加载成功的回调函数
@@ -426,6 +425,7 @@
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().removeClass('loading');
 				}
+				console.log(mods,'removeloading');
 			}
 		},
 		/**
@@ -454,7 +454,9 @@
 					that.latestRequest = o.url;
 					if(isFunction(that.loading.beforeSend)) {
 						var mods = that.headers.Temps ? arrayDiff(that.currentUrlCache, that.headers.Temps.split(',')) : that.currentUrlCache;
-						var i = 0, len = mods.length;	
+						var i = 0, len = mods.length;
+						mods = len > 0 ? mods : that.currentUrlCache;
+						len = mods.length;
 						for(; i < len; i++) {
 							newMods.push(that.replacePath(mods[i]));
 						}
@@ -468,6 +470,7 @@
 							History.replaceState('', o.title, o.url);
 						}
 						that.isLinkClick = false;
+						that.refreshPageCache(o.url);
 						if(isFunction(that.loading.success)) {
 							that.loading.success.call(that.loading, newMods, o.url);
 						}
@@ -481,7 +484,7 @@
 					}
 				},
 				complete: function() {
-					app.tooltip.close();
+					
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
 					console.error(textStatus);	
