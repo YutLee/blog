@@ -1,0 +1,44 @@
+2014-01-15 11:18:15 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:18:22 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:21:31 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:22:25 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:22:32 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:24:21 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:24:22 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=undefined<br>
+					<b>错误详情</b>: Unknown column 'undefined' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2014-01-15 11:24:29 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:24:30 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: SELECT * FROM blog  WHERE id=undefined<br>
+					<b>错误详情</b>: Unknown column 'undefined' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
+2014-01-15 11:24:35 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in ()<br>
+					<b>错误详情</b>: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1<br>
+					<b>错误代码</b>:1064<br>
+2014-01-15 11:24:36 | ::1 | /GitHub/blog/index.php | MySQL Query Error<br>
+					<b>SQL</b>: delete from blog where id in (undefined)<br>
+					<b>错误详情</b>: Unknown column 'undefined' in 'where clause'<br>
+					<b>错误代码</b>:1054<br>
