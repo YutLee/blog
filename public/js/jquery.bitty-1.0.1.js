@@ -1,5 +1,5 @@
 /**
- * @license Copyright 2013
+ * @license Copyright 2013-2014
  * jQuery bitty v1.0.1
  * 
  * base jquery.history.js
@@ -142,7 +142,7 @@
 		 * @param {Json} data 必须，新页面数据和模板
 		 * @private
 		 */
-		loadPage: function(url, data) {
+		loadPage: function(url, data, mod) {
 			var that = this,
 				tempId = data.temp_id,
 				hint = data.hint;
@@ -175,67 +175,80 @@
 				}
 				return false;
 			}
-			
-			if($.isPlainObject(tempId)) {
-				var allTemps = data.temp_url;
-				var diff = that.currentUrlCache.length > 0 ? arrayDiff(that.currentUrlCache, allTemps) : allTemps;
-				var allTempsLen = allTemps.length,
-					k = 0, 
-					l = diff.length;
 
-				for(; k < l; k++) {
-					var id = that.replacePath(diff[k]);
-					if($('#' + id).length > 0) {
-						$('#' + id).remove();	//删除在当前页面但不在新页面的模块
-					}
-				}
+			if(isString(mod)) {
+				console.log(5);
+				$(mod).append(that.getCompleteHtml(data));
+			}else {
+				if($.isPlainObject(tempId)) {
+					var allTemps = data.temp_url;
+					var diff = that.currentUrlCache.length > 0 ? arrayDiff(that.currentUrlCache, allTemps) : allTemps;
+					var allTempsLen = allTemps.length,
+						k = 0, 
+						l = diff.length;
+
 				
-				url = url.replace(that.dominRegExp, '');	//删除网址域名，减少缓存变量名的长度
-				if(!that.pageCache[url]) {
-					that.pageCache[url] = {};
-				}
-				if(!that.pageCache[url]['temps']) {
-					that.pageCache[url]['temps'] = allTemps.join(',');
-				}
-				if(!that.pageCache[url]['allTemps']) {
-					that.pageCache[url]['allTemps'] = allTemps.join(',');
-				}
-				
-				that.currentUrlCache = allTemps;
-
-				for(var key in tempId) {	//遍历需要更新的模板
-					var idx = parseInt(key.replace(/[^\d]/g, '')), 
-						value = tempId[key],
-						id = that.replacePath(value),
-						html;
-					if(!that.tempCache[value] && !$.isFunction(that.tempCache[value])) {
-						that.tempCache[value] = doT.template(data.temp[key]);
-						that.tempUrlCache.push(value);
-					}
-					html = ($.isPlainObject(data.data)) ? that.tempCache[value](data.data[key]) : that.tempCache[value]('');
-					
-					if($('#' + id).length > 0) {	
-						$('#' + id).remove();	//删除要替换的已存在当前页面的模块
-					}
-
-					//获取需要插入位置的id
-					function insertHtml(idx) {
-						idx -= 1;
-						if(idx < 0) {
-							$(data.mod[key]).prepend($('<div id="' + id +'"/>').html(html));
-						}else {
-							var existId = that.replacePath(allTemps[idx]),
-								prevId = $(data.mod[key]).find('#' + existId);
-							if(prevId.length === 1) {
-								prevId.after($('<div id="' + id +'"/>').html(html));
-							}else {
-								insertHtml(idx - 1);
-							}
+					for(; k < l; k++) {
+						var id = that.replacePath(diff[k]);
+						if($('#' + id).length > 0) {
+							$('#' + id).remove();	//删除在当前页面但不在新页面的模块
 						}
 					}
 					
-					insertHtml(idx);
+					url = url.replace(that.dominRegExp, '');	//删除网址域名，减少缓存变量名的长度
+					if(!that.pageCache[url]) {
+						that.pageCache[url] = {};
+					}
+					if(!that.pageCache[url]['temps']) {
+						that.pageCache[url]['temps'] = allTemps.join(',');
+					}
+					if(!that.pageCache[url]['allTemps']) {
+						that.pageCache[url]['allTemps'] = allTemps.join(',');
+					}
+					
+					that.currentUrlCache = allTemps;
+				
+					for(var key in tempId) {	//遍历需要更新的模板
+						var idx = parseInt(key.replace(/[^\d]/g, '')), 
+							value = tempId[key],
+							id = that.replacePath(value),
+							html;
+						if(!that.tempCache[value] && !$.isFunction(that.tempCache[value])) {
+							that.tempCache[value] = doT.template(data.temp[key]);
+							that.tempUrlCache.push(value);
+						}
+						html = ($.isPlainObject(data.data)) ? that.tempCache[value](data.data[key]) : that.tempCache[value]('');
+						
+						if($('#' + id).length > 0) {	
+							$('#' + id).remove();	//删除要替换的已存在当前页面的模块
+						}
 
+						//获取需要插入位置的id
+						function insertHtml(idx) {
+							var newMods;
+							idx -= 1;
+
+							if($.isPlainObject(data.mod)) {
+								newMods = data.mod[key];
+							}else {
+								throw new Error("('~_~) 需要插入的位置mods数组不存在");
+							}
+							
+							if(idx < 0) {
+								$(newMods).prepend($('<div id="' + id +'"/>').html(html));
+							}else {
+								var existId = that.replacePath(allTemps[idx]),
+									prevId = $(newMods).find('#' + existId);
+								if(prevId.length === 1) {
+									prevId.after($('<div id="' + id +'"/>').html(html));
+								}else {
+									insertHtml(idx - 1);
+								}
+							}
+						}
+						
+						insertHtml(idx);
+					}
 				}
 
 				that.loadCss(data.css_url);
@@ -434,6 +447,9 @@
 				throw new Error("请求的url地址不正确 ('=_=)");
 			}
 
+			that.setHeaders(o.url, o.temps);
+			o.headers = that.headers;
+
 			function beforeSend() {
 				that.latestRequest = o.url;
 				if(o.isHistory) {
@@ -507,7 +523,7 @@
 
 			that.isLinkClick = true;
 			//url = url.replace(/[\u4e00-\u9fa5]/g, encodeURIComponent('$0', true));	//对中文进行编码
-			that.setHeaders(o.url, o.temps);
+			//that.setHeaders(o.url, o.temps);
 
 			settings = $.extend(true, {}, o);
 
