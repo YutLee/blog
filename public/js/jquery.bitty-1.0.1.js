@@ -88,17 +88,18 @@
 		 * 替换文件路径为合法 html标签 ID
 		 * @param {string} path 必须，需要替换的文件路径
 		 * @return {string} 
+		 * @private
 		 */
 		replacePath: function(path) {
 			return path.replace(this.dominRegExp, '').replace(/[^(\-|\w)]/g, '-');
 		},
 		/**
 		 * 初始化
-		 * @param {string} url 必须，新页面地址
-		 * @param {Json} data 必须，新页面数据和模板
 		 */
-		init: function(url, data) {
+		init: function() {
 			var that = this,
+				data = that.initData,
+				url = window.location.href,
 				tempId = data.temp_id;
 
 			if($.isPlainObject(tempId)) {
@@ -130,12 +131,16 @@
 					}
 				}
 			}
+
+			that.loadPage(url, data);
 			that.bindLink();
+			that.bindSubmit();
 		},
 		/**
 		 * 加载页面
 		 * @param {string} url 必须，新页面地址
 		 * @param {Json} data 必须，新页面数据和模板
+		 * @private
 		 */
 		loadPage: function(url, data) {
 			var that = this,
@@ -234,9 +239,18 @@
 				}
 
 				that.loadCss(data.css_url);
+
+				//页面加载完成后统一加载的js
+				if($.isArray(that.beforeJs)) {
+					for(var i = 0; i < that.beforeJs; i++) {
+						that.beforeJs[i] = that.beforeJs[i].replace(that.dominRegExp, '');	
+					}
+					that.loadJs(that.beforeJs);
+				}
+
 				that.loadJs(data.js_url);
 				
-				//统一加载最后的js
+				//其他js加载完后统一加载最后的js
 				if($.isArray(that.finalJs)) {
 					for(var i = 0; i < that.finalJs; i++) {
 						that.finalJs[i] = that.finalJs[i].replace(that.dominRegExp, '');	
@@ -395,8 +409,11 @@
 			}
 		},
 		/**
-		 * ajax请求Json数据
-		 * @param {string} options 必须
+		 * ajax请求Json数据, 该方法基本的参数和jQuery.ajax方法的参数一致
+		 * @param {string} temps 可缺省，请求新页面所需的模板id；多个模板id用","隔开；缺省时，服务器返回完整的页面模板；
+		 * @param {boolean} isHistory 可缺省， 新页面地址是否加入历史地址记录， 默认为 true
+		 * @param {boolean} isScrollTop 可缺省，请求成功后是否滚动到顶部， 默认为 false 
+		 * @param {string} title 可缺省，新页面标题，缺省下取当前页面标题
 		 */
 		ajax: function(options) {
 			var that = this,
@@ -405,7 +422,8 @@
 					dataType: 'json',
 					headers: that.headers,
 					title: document.title,
-					isHistory: true,
+					isHistory: true,	//是否加入历史地址
+					isScrollTop: false,	//请求成功后是否滚动到顶部
 					temps: ''
 				},
 				settings;
@@ -435,10 +453,14 @@
 			}
 
 			function success(data) {
-				console.log(data);
 				if(that.latestRequest === o.url) {
 					that.isLinkClick = false;
 					that.refreshPageCache(o.url);
+
+					if(o.isScrollTop == true) {
+						$('html,body').animate({scrollTop: 0}, 300);
+					}
+
 					if($.isFunction(that.loading.success)) {
 						that.loading.success.call(that.loading, newMods, o.url);
 					}
@@ -448,7 +470,6 @@
 							return false;	
 						}
 					}
-					//that.loadPage(o.url, data);
 				}
 			}
 
@@ -456,6 +477,7 @@
 
 			delete settings.title;
 			delete settings.isHistory;
+			delete settings.isScrollTop;
 			delete settings.temps;
 
 			settings.beforeSend = function() {
@@ -475,11 +497,8 @@
 			$.ajax(settings);
 		},
 		/**
-		 * 加载新页面，Ajax请求获取数据
-		 * @param {string} url 必须，新页面地址
-		 * @param {string} temps 可缺省，请求新页面所需的模板id；多个模板id用","隔开；缺省时，服务器返回完整的页面模板；
-		 * @param {boolean} isHistory 可缺省， 新页面地址是否加入历史地址记录， 默认 true 加入
-		 * @param {string} title 可缺省，新页面标题，缺省下取当前页面标题
+		 * 加载新页面，Ajax请求获取数据并将套好的html插入到页面中
+		 * @param {Object} otherParam 其他参数，参考ajax方法参数
 		 */
 		request: function(options) {
 			var that = this,
@@ -503,88 +522,151 @@
 			//that.ajax({url: o.url, isHistory: o.isHistory, title: o.title, type: o.type, data: o.data, callback: o.callback});
 		},
 		/**
-		 * 刷新当前页面
-		 */
-		refresh: function() {
-			this.request({url: window.location.href});
-		},
-		/**
-		 * 绑定<a>链接点击事件
-		 */
-		bindLink: function() {
-			var that = this;
-			$('body').delegate('a:not([target=_blank],[target=_top],[target=_parent],[target=_self])', 'click', function() {
-				var t = $(this),
-					url = t.attr('href'),
-					temps = t.attr('data-temps'),
-					title = t.attr('data-title');
-				if( !($.trim(url).match(/#.*/) || $.trim(url).match(/javascript:/)) ) {
-					that.request({url: url, temps: temps, title: title});
-					return false;
-				}	
-			});	
-		},
-		/**
 		 * 表单提交
 		 * @param {string} formId 可缺省，表单id；缺省时 submitId 参数必填
 		 * @param {string} submitId 可缺省，提交的按钮；缺省时 formId 参数必填
 		 * @param {string} url 可缺省，提交的地址；缺省时默认提交到当前地址或表单的 action 属性地址
 		 * @param {string} method 可缺省，提交的方式；缺省时默认取表单 method 属性的值，method为空时默认'POST'提交
-		 * @param {boolean} isHistory 可缺省， 新页面地址是否加入历史地址记录， 默认 true 加入
-		 * @param {string} title 可缺省，新页面标题，缺省下取当前页面标题
-		 * @param {string} temps 可缺省，请求新页面所需的模板id；多个模板id用","隔开；缺省时，服务器返回完整的页面模板；
+		 * @param {Object} otherParam 其他参数，参考ajax方法参数
 		 */
-		ajaxForm: function(options) {
+		ajaxForm: function(options, check) {
 			var that = this,
 				o = $.extend({
 					formId: null, 
 					submitId: null, 
 					method: null
 				}, options || {}),
-				settings;
+				settings,
+				button,
+				form,
+				params,
+				checked = true;
 
 			if(!o.formId) {
 				if(!o.submitId) {
-					return false;
+					throw new Error("(*_*) 参数 formId 或 submitId 必须有一个");
 				}else {
-					var button = $('#' + o.submitId);	
-					o.formId = button.closest('form')[0];
+					button = isString(o.submitId) ? $('#' + o.submitId) : $(o.submitId);
+					form = button.closest('form');
 				}
+			}else {
+				form = isString(o.formId) ? $('#' + o.formId) : $(o.formId);
 			}
-			var $form = isString(o.formId) ? $('#' + o.formId) : $(o.formId);
-			
+
+			if($.isFunction(check)) {
+				checked = check.call(that) || true;
+			}
+
+			if(!checked) {
+				event.preventDefault();
+				return false;
+			}
+
 			if(!o.method) {
-				var m = $form.attr('method');
+				var m = form.attr('method');
 				o.method = !m ? 'GET' : m.toLocaleUpperCase(); 
 			}
 			
 			if(!o.url) {
-				var action = $form.attr('action');
+				var action = form.attr('action');
 				o.url = !action ? window.location.href : action; 
 			}
-			
-			var params = $form.serialize();//form序列化, 自动调用了encodeURIComponent方法将数据编码了 
-			params = decodeURIComponent(params, true); //将数据解码
 
-			var data;
+			params = form.serialize();//form序列化, 自动调用了encodeURIComponent方法将数据编码了 
+			//params = decodeURIComponent(params, true); //将数据解码
+
 			if(o.method == 'POST') {
-				data = params;
-				o.isHistory = false;
+				o.data = params;
+				//o.isHistory = false;
 			}else {
-				data = '';
-				o.url = o.url.match(/&$/g) ? o.url + params :  o.url + '&' +  params;
+				delete o.data;
+				o.url = o.url.match(/[?|&]/g) ? o.url + params :  o.url + '?&' +  params;
 			}
+
+			delete o.formId;
+			delete o.submitId;
+			delete o.method;
 
 			settings = $.extend(true, {}, o);
 
 			that.request(settings);
 
+			event.preventDefault();
+			//event.stopPropagation();
 			return false;
+		},
+		/**
+		 * 刷新当前页面，该方法请求 window.location.href 地址
+		 */
+		refresh: function() {
+			this.request({url: window.location.href});
+		},
+		/**
+		 * 绑定<a>链接点击事件
+		 * @private
+		 */
+		bindLink: function() {
+			var that = this;
+			$('body').delegate('a:not([target=_blank],[target=_top],[target=_parent],[target=_self],[data-bind=unbind])', 'click', function(e) {
+				var t = $(this),
+					url = t.attr('href'),
+					temps = t.attr('data-temps'),
+					title = t.attr('data-title'),
+					history = t.attr('is-history'),
+					scrollTop = t.attr('is-scroll-top'),
+					isHistory,
+					isScrollTop;
+
+				if( !($.trim(url).match(/#.*/) || $.trim(url).match(/javascript:/)) ) {
+					if(history === 'false') {
+						isHistory = false;
+					}else if(history === '1') {
+						isHistory = 'pseudo';
+					}	
+					if(scrollTop === 'false') {
+						isScrollTop = false;
+					}
+					that.request({url: url, temps: temps, title: title, isHistory: isHistory, isScrollTop: isScrollTop});
+					e.preventDefault();
+				}	
+			});	
+		},
+		/**
+		 * 绑定 submit 提交按钮
+		 * @private
+		 */
+		bindSubmit: function() {
+			var that = this;
+			$('body').delegate('button[type=submit][data-bind=bind], input[type=submit][data-bind=bind]', 'click', function(event) {
+				var t = $(this),
+					temps = t.attr('data-temps'),
+					title = t.attr('data-title'),
+					history = t.attr('is-history'),
+					scrollTop = t.attr('is-scroll-top'),
+					check = t.attr('data-check'),
+					isHistory,
+					isScrollTop;
+
+				if(history === 'false') {
+					isHistory = false;
+				}else if(history === '1') {
+					isHistory = 'pseudo';
+				}	
+				if(scrollTop === 'false') {
+					isScrollTop = false;
+				}
+				if(check) {
+					eval(check);
+				}
+				that.ajaxForm({submitId: this, temps: temps, title: title, isHistory: isHistory, isScrollTop: isScrollTop}, check);
+				//e.preventDefault();
+			});	
 		}
 	};
 	
 	/**
 	 * 绑定历史地址事件
+	 * @private
 	 */
 	History.Adapter.bind(window, 'statechange', function() {
 		var bt = app.bitty,

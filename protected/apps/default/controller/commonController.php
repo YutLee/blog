@@ -25,7 +25,7 @@ class commonController extends baseController
 			$data = '{}';
 		}
 		$this->display('html/header');
-		echo '<script>(function(window, undefined) {var app = window.app = window.app || {}, bt = app.bitty;bt.initData = '.$data.';bt.loadPage(window.location.href, bt.initData);bt.bindLink();})(window);</script>';
+		echo '<script>(function(bitty) {bitty.initData = '.$data.';bitty.init();})(app.bitty);</script>';
 		$this->display('html/footer');
 	}
 	
