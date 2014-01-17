@@ -176,9 +176,9 @@
 				return false;
 			}
 
-			if(isString(mod)) {
-				console.log(5);
-				$(mod).append(that.getCompleteHtml(data));
+			if(mod) {
+				mod = isString(mod) ? $(mod) : mod;
+				mod.append(that.getCompleteHtml(data));
 			}else {
 				if($.isPlainObject(tempId)) {
 					var allTemps = data.temp_url;
