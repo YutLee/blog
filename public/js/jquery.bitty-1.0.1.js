@@ -261,7 +261,6 @@
 		/**
 		 * 加载页面javascript
 		 * @param {Array} url <script>标签的src属性
-		 * @private
 		 */
 		loadJs: function (url) {
 			var i = 0,
@@ -280,7 +279,6 @@
 		/**
 		 * 加载页面css
 		 * @param {Array} url <link>标签的href属性
-		 * @private
 		 */
 		loadCss: function (url) {
 			var that = this,
@@ -369,7 +367,7 @@
 			 * 加载成功的回调函数
 			 * @param {Array} 插入页面的模块的 id 数组
 			 */
-			success: function(mods) {
+			success: function(url, data, mods) {
 				//tooltip.close();
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().removeClass('loading');
@@ -405,46 +403,33 @@
 			that.setHeaders(o.url, o.temps);
 			o.headers = that.headers;
 
-			that.isHistoryAction = true;	//判断是否是点击了历史前进、后退按钮
-
 			function beforeSend() {
 				that.latestRequest = o.url;
 				
+				that.isHistoryAction = false;	//判断是否是点击了历史前进、后退按钮
 				if(o.isHistory) {
 					History.pushState('', o.title, o.url);
 					History.replaceState('', o.title, o.url);
 				}
-				if($.isFunction(that.loading.beforeSend)) {
-					var mods = that.headers.Temps ? arrayDiff(that.currentUrlCache, that.headers.Temps.split(',')) : that.currentUrlCache;
-					var i = 0, len = mods.length;
-					mods = len > 0 ? mods : that.currentUrlCache;
-					len = mods.length;
-					for(; i < len; i++) {
-						newMods.push(that.replacePath(mods[i]));
-					}
-					that.loading.beforeSend.call(that.loading, newMods, o.url);
+				that.isHistoryAction = true;
+
+				var mods = that.headers.Temps ? arrayDiff(that.currentUrlCache, that.headers.Temps.split(',')) : that.currentUrlCache;
+				var i = 0, len = mods.length;
+				mods = len > 0 ? mods : that.currentUrlCache;
+				len = mods.length;
+				for(; i < len; i++) {
+					newMods.push(that.replacePath(mods[i]));
 				}
 			}
 
 			function success(data) {
-				if(that.latestRequest === o.url) {
-					that.isHistoryAction = false;
-					that.refreshPageCache(o.url);
-
-					if(o.isScrollTop === true) {
-						$('html,body').animate({scrollTop: 0}, 300);
-					}
-
-					if($.isFunction(that.loading.success)) {
-						that.loading.success.call(that.loading, newMods, o.url);
-					}
-					if($.isFunction(o.callback)) {
-						var callback = o.callback.call(that, data);
-						if(!callback) {
-							return false;
-						}
-					}
+				if(o.isScrollTop === true) {
+					$('html,body').animate({scrollTop: 0}, 300);
 				}
+
+	            if(data.hint && data.hint.url && !isEmpty(data.hint.url)) {
+	                bitty.request({url: data.hint.url});
+	            }
 			}
 
 			settings = $.extend(true, {}, o);
@@ -457,14 +442,27 @@
 			settings.beforeSend = function() {
 				beforeSend();
 				if($.isFunction(o.beforeSend)) {
-					o.beforeSend.call(this);
+					if(o.beforeSend.call(this) === false) {
+						return false;
+					}
+				}
+				if($.isFunction(that.loading.beforeSend)) {
+					that.loading.beforeSend.call(that.loading, newMods, o.url);
 				}
 			};
 
 			settings.success = function(data) {
-				success(data);
-				if($.isFunction(o.success)) {
-					o.success.call(this, data);
+				if(that.latestRequest === o.url) {
+					that.refreshPageCache(o.url);
+					success(data);
+					if($.isFunction(o.success)) {
+						if(o.success.call(that, data) === false) {
+							return false;
+						}
+					}
+					if($.isFunction(that.loading.success)) {
+						that.loading.success.call(that.loading, o.url, data, newMods);
+					}
 				}
 			};
 
@@ -479,7 +477,6 @@
 				o = $.extend(true, {}, options),
 				settings;
 
-			//that.isHistoryAction = true;
 			//url = url.replace(/[\u4e00-\u9fa5]/g, encodeURIComponent('$0', true));	//对中文进行编码
 			//that.setHeaders(o.url, o.temps);
 
@@ -488,7 +485,9 @@
 			settings.success = function(data) {
 				that.loadPage(o.url, data);
 				if($.isFunction(o.success)) {
-					o.success.call(this, data);
+					if(o.success.call(this, data) === false) {
+						return false;
+					}
 				}
 			};
 
@@ -501,6 +500,7 @@
 		 * @param {string} submitId 可缺省，提交的按钮；缺省时 formId 参数必填
 		 * @param {string} url 可缺省，提交的地址；缺省时默认提交到当前地址或表单的 action 属性地址
 		 * @param {string} method 可缺省，提交的方式；缺省时默认取表单 method 属性的值，method为空时默认'POST'提交
+		 * @param {Function} check 可缺省，提交表单前的回调函数，常用于表单验证
 		 * @param {Object} otherParam 其他参数，参考ajax方法参数
 		 */
 		ajaxForm: function(options, check) {
@@ -513,7 +513,7 @@
 				button,
 				form,
 				params,
-				checked = true;
+				checkSuccess = true;	//表单提交是否验证成功
 
 			if(!o.formId) {
 				if(!o.submitId) {
@@ -527,10 +527,10 @@
 			}
 
 			if($.isFunction(check)) {
-				checked = check.call(that) || true;
+				checkSuccess = (check.call(that) !== false) ? true : false;
 			}
 
-			if(!checked) {
+			if(!checkSuccess) {
 				event.preventDefault();
 				return false;
 			}
@@ -613,7 +613,7 @@
 		var actualState = History.getState(false),
 			url = actualState.url;
 		//url = url.replace(/[\u4e00-\u9fa5]/g, encodeURIComponent('$0', true));	//对中文进行编码
-		if(!bitty.isHistoryAction) {
+		if(bitty.isHistoryAction) {
 			bitty.request({url: url});
 		}
 	});
