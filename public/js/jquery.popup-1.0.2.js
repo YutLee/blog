@@ -19,11 +19,7 @@
 			new box($(this), options);
 		});
 	};
-
-	$.fn[defs.name].defs = defs;
-	$.fn[defs.name].win = [];
-	$.fn[defs.name].close = box.prototype.close;
-
+	
 	function box(element, options) {
 		this.init(element, options);
 		element.data(this.options.name, this);
@@ -47,7 +43,12 @@
 				closeDiv = $('<div class="close">×</div>'),
 				contentDiv = $('<div class="content" />'),
 				popupDiv = $('<div class="popup" />'),
-				zIndex;
+				zIndex,
+				className = options.className;
+
+			if(className && $.trim(className) !== '') {
+				popupDiv.addClass(className);
+			}
 
 			if(len >= 1) {
 				zIndex = parseInt($.fn[defs.name].shadow.attr('zIndex'), 10) + 2;
@@ -76,7 +77,6 @@
 			if($.isFunction(options.insert)) {
 				options.insert.call(that, that, contentDiv);
 			}
-
 		},
 		close: function() {
 			var that = this,
@@ -140,28 +140,44 @@
 			});
 		},
 		destory: function() {
-
+			//do
 		}
 	};
+
+	$.fn[defs.name].defs = defs;
+	$.fn[defs.name].win = [];
+	$.fn[defs.name].close = box.prototype.close;
 
 })(jQuery, 'popup');
 
 (function($, bitty) {
 	$.fn.popup.defs.isHistory = false;
 	$.fn.popup.defs.insert = function(box, content) {
-		var url = box.options.dest;
+		var url = box.options.url;
 		bitty.ajax({
 			url: url,
 			temps: box.options.temps,
 			isHistory: box.options.isHistory,
 			beforeSend: function() {
-				
+				//do
 			},
 			success: function(data) {
 				if(content) {
-					bitty.loadPage(url, data, content);
+					var html = bitty.getCompleteHtml(data)[0],
+						callback = $.fn.popup.defs.callback;
+					content.html(html);
+					if($.isFunction(callback)) {
+						callback.call(box, content, data);
+					}
+					//$.fn.popup.close();
+					//$.fn.popup.refresh();
 				}
+
 			}	
 		});
+		$.fn.popup.refresh = function() {
+			$.fn.popup.defs.insert(box, $.fn.popup.win[0].find('.content'));
+		}
 	};
-})(jQuery, app.bitty);
+	
+})(jQuery, bitty);

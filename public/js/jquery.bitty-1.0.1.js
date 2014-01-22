@@ -106,6 +106,8 @@
 				url = window.location.href,
 				tempId = data.temp_id;
 
+			that.isHistoryAction = true;
+
 			if($.isPlainObject(tempId)) {
 				var allTemps = data.temp_url;
 				
@@ -358,20 +360,22 @@
 			 * @param {Array} 页面上需要删除的模块的 id 数组
 			 */
 			beforeSend: function(mods) {
-				//tooltip.warning(this.msg, 'none');
+				/*
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().addClass('loading');
 				}
+				*/
 			},
 			/** 
 			 * 加载成功的回调函数
 			 * @param {Array} 插入页面的模块的 id 数组
 			 */
 			success: function(url, data, mods) {
-				//tooltip.close();
+				/*
 				for(var i = 0; i < mods.length; i++) {
 					$('#' + mods[i]).parent().removeClass('loading');
 				}
+				*/
 			}
 		},
 		/**
@@ -400,19 +404,19 @@
 				throw new Error('(\'x_x) 请求的url地址不正确');
 			}
 
+
 			that.setHeaders(o.url, o.temps);
 			o.headers = that.headers;
+			that.isHistoryAction = false;	//判断是否是点击了历史前进、后退按钮
 
 			function beforeSend() {
 				that.latestRequest = o.url;
 				
-				that.isHistoryAction = false;	//判断是否是点击了历史前进、后退按钮
 				if(o.isHistory) {
 					History.pushState('', o.title, o.url);
 					History.replaceState('', o.title, o.url);
 				}
 				that.isHistoryAction = true;
-
 				var mods = that.headers.Temps ? arrayDiff(that.currentUrlCache, that.headers.Temps.split(',')) : that.currentUrlCache;
 				var i = 0, len = mods.length;
 				mods = len > 0 ? mods : that.currentUrlCache;
@@ -450,7 +454,6 @@
 					that.loading.beforeSend.call(that.loading, newMods, o.url);
 				}
 			};
-
 			settings.success = function(data) {
 				if(that.latestRequest === o.url) {
 					that.refreshPageCache(o.url);

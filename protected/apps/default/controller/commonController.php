@@ -25,7 +25,7 @@ class commonController extends baseController
 			$data = '{}';
 		}
 		$this->display('html/header');
-		echo '<script>(function(bitty) {bitty.initData = '.$data.';bitty.init();})(app.bitty);</script>';
+		echo '<script>(function(bitty) {bitty.initData = '.$data.';bitty.init();})(bitty);</script>';
 		$this->display('html/footer');
 	}
 	
