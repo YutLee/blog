@@ -11,7 +11,7 @@
  * @author yutlee.cn@gmail.com
  * Date 2013-8-23
  * Update 2013-9-26 --v1.0
- * Update 2014.1.15-2014.1.17 --v1.0.1
+ * Update 2014.1.15-2014.1.24 --v1.0.1
  */
 
 (function ($, window, doT, History, undefined) {
@@ -538,7 +538,7 @@
 				params,
 				checkSuccess = true;	//表单提交是否验证成功
 
-			if(e && Object.prototype.toString.call(e) === '[object Event]') {
+			if(e && (Object.prototype.toString.call(e) === '[object Event]' || Object.prototype.toString.call(e) === '[object Object]')) {
 				e.preventDefault();
 			}else {
 				throw new Error('(\'0o0) 参数 e 是必须滴');
