@@ -1,5 +1,5 @@
 <div class="login">
-    <form class="overlay" action="" method="post" id="login">
+    <form class="overlay" action="" onsubmit="bitty.ajaxForm({formId: this}, event,  a);" method="post" id="login">
         <hgroup>
             <a class="logo" href="/">blog</a>
             <h1>Hello. Sign in.</h1>
@@ -7,19 +7,16 @@
         <div class="field required field-email"><label for="id_email">User name</label><input type="text" name="name" id="id_email" placeholder="User name" onload="this.foucs();"></div>
         <div class="field required field-password"><label for="id_password">Password</label><input type="password" name="password" id="id_password" placeholder="Password"></div>
         <div class="field buttons">
-            <button type="submit" onclick="var t = this;app.bitty.ajaxForm({formId: 'login'}, function() {app.a(t)});">Login</button>
+            <button type="submit">Login</button>
             <input type="submit" data-bind="bind" data-check="a()" value="Login"/>
         </div>
     </form>
     <script type="text/javascript">
-        (function(app) {
-            app.a = function(el) {
-                console.log(el);
-                if(!$('#id_email').val()) {
-                    alert('请输入用户名');
-                    return false;
-                }
+        a = function() {
+            if(!$('#id_email').val()) {
+                alert('请输入用户名');
+                return false;
             }
-        })(app);
+        }
     </script>
 </div>

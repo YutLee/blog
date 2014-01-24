@@ -468,6 +468,26 @@
 					}
 				}
 			};
+			settings.error = function() {
+				if($.isFunction(o.error)) {
+					if(o.error.call(this) === false) {
+						return false;
+					}
+				}
+				if($.isFunction(that.loading.error)) {
+					that.loading.error.call(that.loading, newMods, o.url);
+				}
+			};
+			settings.complete = function() {
+				if($.isFunction(o.complete)) {
+					if(o.complete.call(this) === false) {
+						return false;
+					}
+				}
+				if($.isFunction(that.loading.complete)) {
+					that.loading.complete.call(that.loading, newMods, o.url);
+				}
+			};
 
 			$.ajax(settings);
 		},
@@ -506,7 +526,7 @@
 		 * @param {Function} check 可缺省，提交表单前的回调函数，常用于表单验证
 		 * @param {Object} otherParam 其他参数，参考ajax方法参数
 		 */
-		ajaxForm: function(options, check) {
+		ajaxForm: function(options, e, check) {
 			var that = this,
 				o = $.extend({
 					formId: null,
@@ -518,6 +538,12 @@
 				params,
 				checkSuccess = true;	//表单提交是否验证成功
 
+			if(e && Object.prototype.toString.call(e) === '[object Event]') {
+				e.preventDefault();
+			}else {
+				throw new Error('(\'0o0) 参数 e 是必须滴');
+			}
+
 			if(!o.formId) {
 				if(!o.submitId) {
 					throw new Error('(\'0_1) 参数 formId 或 submitId 必须有一个');
@@ -528,46 +554,42 @@
 			}else {
 				form = isString(o.formId) ? $('#' + o.formId) : $(o.formId);
 			}
-
+			
 			if($.isFunction(check)) {
 				checkSuccess = (check.call(that) !== false) ? true : false;
 			}
 
-			if(!checkSuccess) {
-				event.preventDefault();
-				return false;
+			if(checkSuccess) {
+				if(!o.type) {
+					var m = form.attr('method');
+					o.type = !m ? 'GET' : m.toLocaleUpperCase();
+				}
+
+				if(!o.url) {
+					var action = form.attr('action');
+					o.url = !action ? window.location.href : action;
+				}
+
+				params = form.serialize();//form序列化, 自动调用了encodeURIComponent方法将数据编码了 
+				//params = decodeURIComponent(params, true); //将数据解码
+
+				if(o.type === 'POST') {
+					o.data = params;
+					//o.isHistory = false;
+				}else {
+					delete o.data;
+					o.url = o.url.match(/[?|&]/g) ? o.url + params : o.url + '?&' +  params;
+				}
+
+				delete o.formId;
+				delete o.submitId;
+
+				settings = $.extend(true, {}, o);
+
+				that.request(settings);
 			}
 
-			if(!o.type) {
-				var m = form.attr('method');
-				o.type = !m ? 'GET' : m.toLocaleUpperCase();
-			}
-
-			if(!o.url) {
-				var action = form.attr('action');
-				o.url = !action ? window.location.href : action;
-			}
-
-			params = form.serialize();//form序列化, 自动调用了encodeURIComponent方法将数据编码了 
-			//params = decodeURIComponent(params, true); //将数据解码
-
-			if(o.type === 'POST') {
-				o.data = params;
-				//o.isHistory = false;
-			}else {
-				delete o.data;
-				o.url = o.url.match(/[?|&]/g) ? o.url + params : o.url + '?&' +  params;
-			}
-
-			delete o.formId;
-			delete o.submitId;
-
-			settings = $.extend(true, {}, o);
-
-			that.request(settings);
-
-			event.preventDefault();
-			//event.stopPropagation();
+			//e.stopPropagation();
 			//return false;
 		},
 		/**
